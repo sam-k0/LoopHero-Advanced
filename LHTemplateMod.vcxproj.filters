@@ -113,6 +113,9 @@
     <ClInclude Include="LH\LHUI.h">
       <Filter>LH</Filter>
     </ClInclude>
+    <ClInclude Include="Dependencies.h">
+      <Filter>LH</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="SDK">

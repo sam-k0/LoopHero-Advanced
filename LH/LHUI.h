@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
-#include "PluginSetup.h"
-#include "LH/LHObjects.h"
+#include "../PluginSetup.h"
+#include "LHObjects.h"
 
 // Useful bindings to UI related functionality
 namespace LHUI 
