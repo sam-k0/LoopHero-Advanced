@@ -16,7 +16,10 @@ static float g_SettingValueModEnabled = 1.0; // Mod enabled
 static bool g_CreatedlangButtons = false;
 double g_OrigLangButtonRef;
 double g_newLangButtonRef;
+
+
 double g_LanguageButtonCopyRef;
+double g_PolishSpriteRef;
 
 // Unload function, remove callbacks here
 YYTKStatus PluginUnload()
@@ -108,6 +111,7 @@ int CodePostPatch(YYTKCodeEvent* codeEvent, void* p_rawCCAttr)
             Binds::SetVariable(g_LanguageButtonCopyRef, "language", langid);
             Binds::SetVariable(g_LanguageButtonCopyRef, "text_lang", langid);
             Binds::SetVariable(g_LanguageButtonCopyRef, "xx", 548+218.);
+			Binds::SetVariable(g_LanguageButtonCopyRef, "sprite_index",g_PolishSpriteRef);
         }
 
     }
@@ -161,6 +165,9 @@ void InstallPatches()
             Config::WriteIniValue(cfgFilename, SectionName, SettingKeyModEnabled, std::to_string(g_SettingValueModEnabled));
         }
     }
+
+    // load assets
+	g_PolishSpriteRef = Assets::AddSprite("Advanced\\flag_pol.png", 3, true, false, 0, 0);
 
 }
 
