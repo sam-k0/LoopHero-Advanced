@@ -74,6 +74,18 @@ namespace Binds {
         return var;
     }
 
+    YYRValue GetVariable(YYRValue inst, const char* varname)
+    {
+        YYRValue var;
+        CallBuiltin(var, "variable_instance_get", nullptr, nullptr, { inst, varname });
+        return var;
+	}
+
+    void SetVariable(YYRValue inst, const char* varname, YYRValue value)
+    {
+        CallBuiltin(value, "variable_instance_set", nullptr, nullptr, { inst, varname, value });
+	}
+
     void PrintArrayInstanceVariables(YYRValue var, YYRValue inst, Color c = Color::CLR_DEFAULT)
     {
         YYRValue len;

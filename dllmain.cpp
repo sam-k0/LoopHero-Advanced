@@ -5,13 +5,18 @@
 #include "PluginSetup.h"
 #include "LH/Assets.h"
 #include "LH/LHSprites.h"
+#include "LH/LHObjects.h"
 #include "LH/LHCore.h" // mandatory core functions
 #include "LH/Config.h" // ini config
 #include "LH/CallbackCore.h"
 #include "Dependencies.h"
 
-static float SettingValueModEnabled = 1.0; // Mod enabled
+static float g_SettingValueModEnabled = 1.0; // Mod enabled
 
+static bool g_CreatedlangButtons = false;
+double g_OrigLangButtonRef;
+double g_newLangButtonRef;
+double g_LanguageButtonCopyRef;
 
 // Unload function, remove callbacks here
 YYTKStatus PluginUnload()
@@ -41,14 +46,28 @@ int CodePrePatch(YYTKCodeEvent* codeEvent, void* p_rawCCAttr)
         return YYTK_OK;
     }
 
-    /*
-    * Do your things here. This is probably the most interesting part of the code
-    * You can change game behavior here, get the calling object's information and much more.
-    * ---------------
-    * codeObj contains information about the event.
-    * selfInst is the calling instance.
-    * otherInst is the other instance, for example in collision events.
-    */
+    // new lang button catched
+    if (strcmp(codeObj->i_pName, "gml_Object_o_base_button_Mouse_4") == 0 && int(g_newLangButtonRef) == selfInst->i_id)
+    {
+        // then catch the button press of that button, set the global variable "lang" to the correct lang id, and emit the "other_10" event on a language button
+        // or alternatively set the language of the english button to custom, and then trigger the other 10 event
+        // and then set the language back to english...
+		Misc::Print("this is doing nothing for now.");
+
+        return YYTK_DONTCALL;
+    }
+
+    if (strcmp(codeObj->i_pName, "gml_Object_o_menu_button_Alarm_6") == 0 && int(g_newLangButtonRef) == selfInst->i_id)
+    {
+        return YYTK_DONTCALL;
+    }
+
+    // Dont call step event on custom buttons cause it will break
+    if (strcmp(codeObj->i_pName, "gml_Object_o_opt_lang_button_Step_2") == 0 && int(g_LanguageButtonCopyRef) == selfInst->i_id)
+    {
+        //return YYTK_DONTCALL;
+    }
+
 
     return YYTK_OK;
 }
@@ -68,33 +87,30 @@ int CodePostPatch(YYTKCodeEvent* codeEvent, void* p_rawCCAttr)
     if (!codeObj->i_pName)
         return YYTK_INVALIDARG;
 
-    if (ccAttr->call == OriginalCall::CANCELLED) // If you only want to run this post-patch when the original code was run
+
+    if (strcmp(codeObj->i_pName, "gml_Object_o_opt_lang_button_Create_0") == 0)
     {
-        Misc::Print("Error: this plugin needs the original event to be called!");
-        return YYTK_OK; 
+
+        if (!g_CreatedlangButtons)
+        {
+            g_CreatedlangButtons = true; // set this to false upon room change to spawn buttons again...
+            g_OrigLangButtonRef = double(selfInst->i_id);
+            // Create another button manually and set sprite
+
+            g_newLangButtonRef = static_cast<double>(Binds::CallBuiltinA("instance_create_depth", { 531., 90., -10010., (double)LHObjectEnum::o_menu_button }));
+            Binds::CallBuiltinA("variable_instance_set", { g_newLangButtonRef, "click_event", -1. }); // delete original callback
+            Binds::CallBuiltinA("variable_instance_set", { g_newLangButtonRef, "text", "test" });
+            Binds::CallBuiltinA("variable_instance_set", { g_newLangButtonRef, "fa_ltext", "test" });
+
+            // new real lang buton
+            const char* langid = "pol";
+            g_LanguageButtonCopyRef = Binds::CallBuiltinA("instance_create_depth", {548.,40., -14002., (double)LHObjectEnum::o_opt_lang_button });
+            Binds::SetVariable(g_LanguageButtonCopyRef, "language", langid);
+            Binds::SetVariable(g_LanguageButtonCopyRef, "text_lang", langid);
+            Binds::SetVariable(g_LanguageButtonCopyRef, "xx", 548+218.);
+        }
+
     }
-
-    // Print all args
-    if (strcmp(codeObj->i_pName, "gml_Object_o_menu_button_Alarm_6") == 0) // Only print args for "with" events, otherwise it gets spammy
-    {
-        Misc::Print("Yep");
-        auto& args = codeEvent->Arguments();
-
-        std::apply([](auto&&... vals)
-            {
-                ((Misc::Print(std::format("Arg: {}", (void*)vals))), ...);
-            }, args);
-    }
-
-
-    /* 
-    * Do your things here. This is probably the most interesting part of the code
-    * You can change game behavior here, get the calling object's information and much more.
-    * ---------------
-    * codeObj contains information about the event.
-    * selfInst is the calling instance.
-    * otherInst is the other instance, for example in collision events.
-    */
 
     return YYTK_OK;
 }
@@ -103,7 +119,7 @@ void InstallPatches()
 {
     // Require dependencies
     // Janky as hell. I never thought about priority management when designing the core.
-    for (int i = 0; i < 10; i++) { 
+    /*for (int i = 0; i < 10; i++) {
         if (!Deps::RequireDependency("sam-k0.SnowStorm.yytk"))
         {
             Misc::Print("sam-k0.SnowStorm.yytk is a required depedency, Waiting...", CLR_RED);
@@ -118,12 +134,12 @@ void InstallPatches()
     }
    
     // Import functions from dependencies
-
+    */
 
 	if (LHCore::pInstallPostPatch != nullptr && LHCore::pInstallPrePatch != nullptr)
 	{
-		LHCore::pInstallPostPatch(CodePostPatch); // Method will run after CodeExecute
-        LHCore::pInstallPrePatch(CodePrePatch); // Method will run before CodeExecute, but dont do the same function for both... cause why would you?
+		LHCore::pInstallPostPatch(CodePostPatch);
+        LHCore::pInstallPrePatch(CodePrePatch);
         Misc::Print("Installed patch method(s)", CLR_GREEN);
 	}
 
@@ -132,16 +148,17 @@ void InstallPatches()
     {
         if (Config::KeySectionExists(cfgFilename, SectionName, SettingKeyModEnabled)) {
             // Read the value
-            SettingValueModEnabled = float(Config::ReadIntFromIni(cfgFilename, SectionName, SettingKeyModEnabled, SettingValueModEnabled));
-            if (SettingValueModEnabled != 0.0f)
+            g_SettingValueModEnabled = Config::ReadIntFromIni(cfgFilename, SectionName, SettingKeyModEnabled, g_SettingValueModEnabled);
+            if (g_SettingValueModEnabled == 0)
             {
+                Misc::Print("Disabled in options.ini, bye", CLR_RED);
                 PluginUnload();
             }
         }
         else
         {
             // Write a default value
-            Config::WriteIniValue(cfgFilename, SectionName, SettingKeyModEnabled, std::to_string(SettingValueModEnabled));
+            Config::WriteIniValue(cfgFilename, SectionName, SettingKeyModEnabled, std::to_string(g_SettingValueModEnabled));
         }
     }
 
