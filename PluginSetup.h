@@ -26,14 +26,15 @@ DllExport std::string GetPluginName() // For yytk, mandatory
 
 // Some useful functions that don't fit into their own category (may be restructured in the future)
 namespace Misc {
+    // Never pass text as the format string, game strings contain '%' ("% chance for").
     void Print(std::string s, Color c = CLR_DEFAULT)
     {
-        PrintMessage(c, (gPluginName + ": " + s).c_str());
+        PrintMessage(c, "%s", (gPluginName + ": " + s).c_str());
     }
 
     void PrintDbg(std::string s, std::string func, int line, Color c)
     {
-        PrintMessage(c, (gPluginName + ": " + s + " (" + func + ":" + std::to_string(line) + ")").c_str());
+        PrintMessage(c, "%s", (gPluginName + ": " + s + " (" + func + ":" + std::to_string(line) + ")").c_str());
     }
 
     // checks if a string s contains a substring subs
@@ -97,10 +98,13 @@ namespace Binds {
         for (int i = 0; i < (int)len; i++)
         {
             CallBuiltin(item, "array_get", nullptr, nullptr, { var, (double)i });
-            CallBuiltin(content, "variable_instance_get", nullptr, nullptr, { inst, static_cast<const char*>(item) });
+            std::string varname = item.operator std::string();
+            if (varname.empty())
+                continue;
+            CallBuiltin(content, "variable_instance_get", nullptr, nullptr, { inst, varname });
             CallBuiltin(type, "typeof", nullptr, nullptr, { content });
-            std::string typestr = std::string(static_cast<const char*>(type));
-            std::string message = std::string(static_cast<const char*>(item)) + " -> " + std::string(static_cast<const char*>(type));
+            std::string typestr = type.operator std::string();
+            std::string message = varname + " -> " + typestr;
 
             if (typestr == "number")
             {
@@ -112,10 +116,10 @@ namespace Binds {
             }
             else if (typestr == "string")
             {
-                message += " : " + std::string(static_cast<const char*>(content));
+                message += " : " + content.operator std::string();
             }
 
-            Misc::Print(message);
+            Misc::Print(message, c);
         }
     }
 
