@@ -5,7 +5,7 @@
 // File functions
 namespace Filesys {
 
-    std::string GetCurrentDir() // Returns EXE directory
+    inline std::string GetCurrentDir() // Returns EXE directory
     {
         char cCurrentPath[FILENAME_MAX]; // get working directory into buffer
         if (!_getcwd(cCurrentPath, sizeof(cCurrentPath)))
@@ -18,7 +18,7 @@ namespace Filesys {
         return str;
     }
 
-    bool FileExists(const std::string& name) {
+    inline bool FileExists(const std::string& name) {
         if (FILE* file = fopen(name.c_str(), "r")) {
             fclose(file);
             return true;

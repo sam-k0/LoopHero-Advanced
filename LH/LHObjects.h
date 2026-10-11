@@ -306,7 +306,7 @@ enum LHObjectEnum {
 
 namespace LHObjects {
 
-    const char* GetObjectName(int id) {
+    inline const char* GetObjectName(int id) {
         static const char* names[] = {
             "o_fake_transition",
             "o_opt_multichoice",

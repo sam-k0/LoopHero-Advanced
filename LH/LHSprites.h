@@ -1221,7 +1221,7 @@ enum LHSpriteEnum {
 
 namespace LHSprites {
 
-    const char* GetSpriteName(int id)
+    inline const char* GetSpriteName(int id)
     {
         switch (id) {
         case  0:
