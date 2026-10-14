@@ -14,7 +14,7 @@
 
 inline HINSTANCE DllHandle;
 
-static std::string gPluginName = "sam-k0.Advanced.yytk";
+static std::string gPluginName = "sam-k0.loophero.advanced";
 static std::string cfgFilename = Filesys::GetCurrentDir() + "\\options.ini";
 static std::string SectionName = "Advanced"; 
 static std::string SettingKeyModEnabled = "Enabled";

@@ -224,9 +224,9 @@ void InstallPatches()
 {
     // Require dependencies janky as hell
     /*for (int i = 0; i < 10; i++) {
-        if (!Deps::RequireDependency("sam-k0.SnowStorm.yytk"))
+        if (!Deps::RequireDependency("sam-k0.loophero.snow"))
         {
-            Misc::Print("sam-k0.SnowStorm.yytk is a required depedency, Waiting...", CLR_RED);
+            Misc::Print("sam-k0.loophero.snow is a required depedency, Waiting...", CLR_RED);
             if (i == 9)
             {   
 				Misc::Print("Failed to load required dependencies, unloading plugin", CLR_RED);
