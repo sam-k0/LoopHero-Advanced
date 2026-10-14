@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -130,6 +130,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>$(SolutionDir)SDK;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -159,6 +160,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="PinFilter.cpp" />
     <ClCompile Include="SDK\Plugins\API Definitions\APIDefs.cpp" />
     <ClCompile Include="SDK\Plugins\Plugins.cpp" />
     <ClCompile Include="SDK\Structures\Documented\CDynamicArray\CDynamicArray.cpp" />
@@ -176,7 +178,9 @@
     <ClInclude Include="LH\LHObjects.h" />
     <ClInclude Include="LH\LHRooms.h" />
     <ClInclude Include="LH\LHSprites.h" />
+    <ClInclude Include="LH\LHDraw.h" />
     <ClInclude Include="LH\LHUI.h" />
+    <ClInclude Include="PinFilter.h" />
     <ClInclude Include="PluginSetup.h" />
     <ClInclude Include="SDK\Enums\Enums.hpp" />
     <ClInclude Include="SDK\FwdDecls\FwdDecls.hpp" />

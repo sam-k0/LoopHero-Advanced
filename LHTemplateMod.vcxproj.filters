@@ -2,6 +2,7 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="PinFilter.cpp" />
     <ClCompile Include="SDK\Plugins\API Definitions\APIDefs.cpp">
       <Filter>SDK</Filter>
     </ClCompile>
@@ -19,6 +20,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="PinFilter.h" />
     <ClInclude Include="PluginSetup.h" />
     <ClInclude Include="SDK\Plugins\API Definitions\APIDefs.hpp">
       <Filter>SDK</Filter>
@@ -108,6 +110,9 @@
       <Filter>LH</Filter>
     </ClInclude>
     <ClInclude Include="LH\CallbackCore.h">
+      <Filter>LH</Filter>
+    </ClInclude>
+    <ClInclude Include="LH\LHDraw.h">
       <Filter>LH</Filter>
     </ClInclude>
     <ClInclude Include="LH\LHUI.h">

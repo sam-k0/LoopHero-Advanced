@@ -11,6 +11,7 @@
 #include "LH/Config.h" // ini config
 #include "LH/CallbackCore.h"
 #include "Dependencies.h"
+#include "PinFilter.h"
 
 static float g_SettingValueModEnabled = 1.0; // Mod enabled
 
@@ -68,6 +69,26 @@ int CodePrePatch(YYTKCodeEvent* codeEvent, void* p_rawCCAttr)
     {
         Misc::Print("Error: this plugin needs the original event to be called!");
         return YYTK_OK;
+    }
+
+    if (PinFilter::ShouldBlockEvent(codeObj->i_pName, selfInst) || PinFilter::ShouldSkipCheckboxEvent(codeObj->i_pName, selfInst))
+    {
+        return YYTK_DONTCALL;
+    }
+
+    if (strcmp(codeObj->i_pName, "gml_Object_o_opt_button_Step_0") == 0)
+    {
+        PinFilter::OnCheckboxStepBegin(selfInst);
+    }
+
+    if (strcmp(codeObj->i_pName, "gml_Object_o_opt_button_Draw_0") == 0)
+    {
+        PinFilter::OnCheckboxDraw(selfInst);
+    }
+
+    if (strcmp(codeObj->i_pName, "gml_Object_o_cursor_Draw_73") == 0)
+    {
+        PinFilter::OnCursorDrawEnd();
     }
 
     // new lang button catched
@@ -143,9 +164,57 @@ int CodePostPatch(YYTKCodeEvent* codeEvent, void* p_rawCCAttr)
 
     }
 
-    if (std::string(codeObj->i_pName).starts_with("gml_Room_"))
+    // Only caller of gml_Script___item_generate (0x596820), YYC scripts don't fire code events themselves.
+    if (strcmp(codeObj->i_pName, "gml_Object_o_item_Alarm_0") == 0)
+    {
+        Misc::Print("Item added to inventory, id " + std::to_string(selfInst->i_id), CLR_GREEN);
+        YYRValue varNames;
+        Binds::GetInstanceVariables(varNames, double(selfInst->i_id));
+        Binds::PrintArrayInstanceVariables(varNames, double(selfInst->i_id));
+
+        PinFilter::OnItemGenerated(selfInst);
+    }
+
+    // Puts the item into the inventory list
+    if (strcmp(codeObj->i_pName, "gml_Object_o_item_Alarm_1") == 0)
+    {
+        PinFilter::OnItemPlaced(selfInst);
+    }
+
+    if (strcmp(codeObj->i_pName, "gml_Object_o_controller_Draw_73") == 0)
+    {
+        PinFilter::OnControllerDrawEnd();
+    }
+
+    if (strcmp(codeObj->i_pName, "gml_Object_o_base_button_Mouse_4") == 0)
+    {
+        PinFilter::OnButtonPressed(selfInst);
+    }
+
+    if (strcmp(codeObj->i_pName, "gml_Object_o_opt_button_Step_0") == 0)
+    {
+        PinFilter::OnCheckboxStepEnd(selfInst);
+    }
+
+    if (strcmp(codeObj->i_pName, "gml_Object_o_text_button_Create_0") == 0)
+    {
+        PinFilter::OnTextButtonCreated(selfInst);
+    }
+
+    if (strcmp(codeObj->i_pName, "gml_Object_o_text_button_Alarm_6") == 0)
+    {
+        PinFilter::OnTextButtonTextReset(selfInst);
+    }
+
+    if (strcmp(codeObj->i_pName, "gml_Object_o_text_button_Draw_0") == 0)
+    {
+        PinFilter::OnTextButtonDrawn(selfInst);
+    }
+
+    if (strncmp(codeObj->i_pName, "gml_Room_", 9) == 0)
     {
 		g_CreatedlangButtons = false; // reset this so lang buttons can be spawned again in the next room
+        PinFilter::OnRoomChange();
     }
 
     return YYTK_OK;
@@ -196,6 +265,8 @@ void InstallPatches()
             Config::WriteIniValue(cfgFilename, SectionName, SettingKeyModEnabled, std::to_string(g_SettingValueModEnabled));
         }
     }
+
+    PinFilter::LoadConfig();
 
     // load assets
 	g_LanguageButtonPolishSpriteRef = Assets::AddSprite("Advanced\\flag_pol.png", 3, true, false, 0, 0);
