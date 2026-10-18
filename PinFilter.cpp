@@ -117,14 +117,6 @@ namespace PinFilter {
         return (int)(double)Binds::CallBuiltinA("ds_list_size", { list });
     }
 
-    std::string JoinValues(const std::vector<int>& values)
-    {
-        std::string s;
-        for (int v : values)
-            s += (s.empty() ? "" : ",") + std::to_string(v);
-        return s;
-    }
-
     // global.class_droplist holds the itm_index values __item_generate picks from. It starts as the types of the
     // class' equipment grid (global.class_slotlist, 3x4 row major, -1 = no slot) and gains a type when a slot is
     // unlocked during the expedition (e.g. the Arsenal card adds the amulet for the rogue), class_slotlist doesn't.
@@ -144,16 +136,11 @@ namespace PinFilter {
         }
 
         g_VisibleTypes.clear();
-        std::string log;
         for (int i = 0; i < TypeCount; i++)
         {
             if (TypeKeys[i] && (!any || hasSlot[i]))
-            {
                 g_VisibleTypes.push_back(i);
-                log += std::string(" ") + TypeKeys[i];
-            }
         }
-        Misc::Print("Pin filter types:" + log + " (class_slotlist " + JoinValues(slots) + ", class_droplist " + JoinValues(drops) + ")");
     }
 
     void SetTypeEnabled(int type, bool enabled)
@@ -200,8 +187,6 @@ namespace PinFilter {
             && !(bool)Binds::GetVariable(item, "inv_lock");
         if (pin)
             Pin(item);
-
-        Misc::Print(std::string("Item drop: ") + TypeKeys[type] + " (itm_index " + std::to_string(type) + ")" + (pin ? " -> pinned" : ""));
     }
 
     void OnRoomChange()
@@ -253,8 +238,6 @@ namespace PinFilter {
         if (shown != g_ButtonShown)
         {
             Binds::SetVariable(g_ButtonRef, "visible", shown);
-            if (shown)
-                Misc::Print("Pin filter button at " + std::to_string((int)x) + "," + std::to_string((int)y));
         }
         g_ButtonShown = shown;
         g_ButtonX = x;

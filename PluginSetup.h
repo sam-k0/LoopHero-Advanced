@@ -56,11 +56,6 @@ namespace Misc {
 }
 
 namespace Binds {
-    inline void GetInstanceVariables(YYRValue& arr, YYRValue inst)
-    {
-        CallBuiltin(arr, "variable_instance_get_names", nullptr, nullptr, { inst });
-    }
-
     inline YYRValue CallBuiltin(const std::string name, CInstance* self, CInstance* other, const std::vector<YYRValue> args)
     {
         YYRValue var;
@@ -86,41 +81,4 @@ namespace Binds {
     {
         CallBuiltin(value, "variable_instance_set", nullptr, nullptr, { inst, varname, value });
 	}
-
-    inline void PrintArrayInstanceVariables(YYRValue var, YYRValue inst, Color c = Color::CLR_DEFAULT)
-    {
-        YYRValue len;
-        YYRValue item;
-        YYRValue content;
-        YYRValue type;
-        CallBuiltin(len, "array_length_1d", nullptr, nullptr, { var });
-
-        for (int i = 0; i < (int)len; i++)
-        {
-            CallBuiltin(item, "array_get", nullptr, nullptr, { var, (double)i });
-            std::string varname = item.operator std::string();
-            if (varname.empty())
-                continue;
-            CallBuiltin(content, "variable_instance_get", nullptr, nullptr, { inst, varname });
-            CallBuiltin(type, "typeof", nullptr, nullptr, { content });
-            std::string typestr = type.operator std::string();
-            std::string message = varname + " -> " + typestr;
-
-            if (typestr == "number")
-            {
-                message += " : " + std::to_string((int)content);
-            }
-            else if (typestr == "bool")
-            {
-                message += " : " + std::to_string(int((bool)content));
-            }
-            else if (typestr == "string")
-            {
-                message += " : " + content.operator std::string();
-            }
-
-            Misc::Print(message, c);
-        }
-    }
-
 }

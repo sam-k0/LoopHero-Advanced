@@ -167,11 +167,6 @@ int CodePostPatch(YYTKCodeEvent* codeEvent, void* p_rawCCAttr)
     // Only caller of gml_Script___item_generate (0x596820), YYC scripts don't fire code events themselves.
     if (strcmp(codeObj->i_pName, "gml_Object_o_item_Alarm_0") == 0)
     {
-        Misc::Print("Item added to inventory, id " + std::to_string(selfInst->i_id), CLR_GREEN);
-        YYRValue varNames;
-        Binds::GetInstanceVariables(varNames, double(selfInst->i_id));
-        Binds::PrintArrayInstanceVariables(varNames, double(selfInst->i_id));
-
         PinFilter::OnItemGenerated(selfInst);
     }
 
