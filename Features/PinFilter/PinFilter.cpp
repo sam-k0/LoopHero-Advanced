@@ -117,28 +117,19 @@ namespace PinFilter {
         return (int)(double)Binds::CallBuiltinA("ds_list_size", { list });
     }
 
-    // global.class_droplist holds the itm_index values __item_generate picks from. It starts as the types of the
-    // class' equipment grid (global.class_slotlist, 3x4 row major, -1 = no slot) and gains a type when a slot is
-    // unlocked during the expedition (e.g. the Arsenal card adds the amulet for the rogue), class_slotlist doesn't.
-    // Falls back to class_slotlist, then to all types.
+    // global.class_droplist holds the unique itm_index values __item_generate picks from. __hero_class_stats fills
+    // it from the class' equipment grid and it gains a type when a slot is unlocked during the expedition (e.g. the
+    // Arsenal card adds the amulet for the rogue). Shows all types if it's missing.
     void RefreshVisibleTypes()
     {
         std::vector<int> drops = ReadGlobalList("class_droplist");
-        std::vector<int> slots = ReadGlobalList("class_slotlist");
         g_DropListSize = (int)drops.size();
-
-        bool hasSlot[TypeCount] = {};
-        bool any = false;
-        for (int type : drops.empty() ? slots : drops)
-        {
-            if (type >= 0 && type < TypeCount && TypeKeys[type])
-                hasSlot[type] = any = true;
-        }
 
         g_VisibleTypes.clear();
         for (int i = 0; i < TypeCount; i++)
         {
-            if (TypeKeys[i] && (!any || hasSlot[i]))
+            bool droppable = drops.empty() || std::find(drops.begin(), drops.end(), i) != drops.end();
+            if (TypeKeys[i] && droppable)
                 g_VisibleTypes.push_back(i);
         }
     }
