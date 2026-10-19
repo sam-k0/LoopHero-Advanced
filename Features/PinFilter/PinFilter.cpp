@@ -4,11 +4,11 @@
 #include <unordered_set>
 #include <algorithm>
 #include <cmath>
-#include "LH/Config.h"
-#include "LH/Filesystem.h"
-#include "LH/LHDraw.h"
-#include "LH/LHObjects.h"
-#include "LH/LHSprites.h"
+#include "../../LH/Config.h"
+#include "../../LH/Filesystem.h"
+#include "../../LH/LHDraw.h"
+#include "../../LH/LHObjects.h"
+#include "../../LH/LHSprites.h"
 
 namespace PinFilter {
 

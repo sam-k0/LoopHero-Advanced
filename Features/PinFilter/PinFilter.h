@@ -1,5 +1,5 @@
 #pragma once
-#include "PluginSetup.h"
+#include "../../PluginSetup.h"
 
 // Auto-pins fresh drops of the item types selected in a menu opened from a button in the equipment grid
 namespace PinFilter {

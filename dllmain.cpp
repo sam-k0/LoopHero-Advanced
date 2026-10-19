@@ -11,7 +11,7 @@
 #include "LH/Config.h" // ini config
 #include "LH/CallbackCore.h"
 #include "Dependencies.h"
-#include "PinFilter.h"
+#include "Features/PinFilter/PinFilter.h"
 
 static float g_SettingValueModEnabled = 1.0; // Mod enabled
 

@@ -160,7 +160,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp" />
-    <ClCompile Include="PinFilter.cpp" />
+    <ClCompile Include="Features\PinFilter\PinFilter.cpp" />
     <ClCompile Include="SDK\Plugins\API Definitions\APIDefs.cpp" />
     <ClCompile Include="SDK\Plugins\Plugins.cpp" />
     <ClCompile Include="SDK\Structures\Documented\CDynamicArray\CDynamicArray.cpp" />
@@ -169,6 +169,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Dependencies.h" />
+    <ClInclude Include="Features\PinFilter\PinFilter.h" />
     <ClInclude Include="LH\Assets.h" />
     <ClInclude Include="LH\CallbackCore.h" />
     <ClInclude Include="LH\Config.h" />
@@ -180,7 +181,6 @@
     <ClInclude Include="LH\LHSprites.h" />
     <ClInclude Include="LH\LHDraw.h" />
     <ClInclude Include="LH\LHUI.h" />
-    <ClInclude Include="PinFilter.h" />
     <ClInclude Include="PluginSetup.h" />
     <ClInclude Include="SDK\Enums\Enums.hpp" />
     <ClInclude Include="SDK\FwdDecls\FwdDecls.hpp" />
