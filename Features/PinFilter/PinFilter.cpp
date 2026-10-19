@@ -36,10 +36,8 @@ namespace PinFilter {
     static double g_FreeCellX = 608.;
     static double g_FreeCellY = 27.;
     static const char* MenuTitle = "Filter";
+    // assembling the filter button at runtime
     static constexpr double ButtonSize = 25.;      // s_expsquarebutton, origin -1,0, frames normal/hover/pressed
-    // 2x2 grid icon baked into the top left of s_equipmenu (camp equipment screen) at 8,6, 13x13 strokes on plain
-    // stone (104,111,111). Cropped one pixel larger to the left and bottom, so the bottom left pixel is stone and
-    // sprite_create_from_surface(removeback) cuts the icon out.
     static constexpr double IconSourceX = 7.;
     static constexpr double IconSourceY = 6.;
     static constexpr double IconCropSize = 14.;
