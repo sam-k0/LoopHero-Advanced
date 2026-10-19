@@ -12,6 +12,7 @@
 #include "LH/CallbackCore.h"
 #include "Dependencies.h"
 #include "Features/PinFilter/PinFilter.h"
+#include "Features/SupplySort/SupplySort.h"
 
 static float g_SettingValueModEnabled = 1.0; // Mod enabled
 
@@ -204,6 +205,16 @@ int CodePostPatch(YYTKCodeEvent* codeEvent, void* p_rawCCAttr)
     if (strcmp(codeObj->i_pName, "gml_Object_o_text_button_Draw_0") == 0)
     {
         PinFilter::OnTextButtonDrawn(selfInst);
+    }
+
+    if (strcmp(codeObj->i_pName, "gml_Object_o_camp_equipmenu_sort_Other_10") == 0)
+    {
+        SupplySort::OnSortPressed();
+    }
+
+    if (strcmp(codeObj->i_pName, "gml_Object_o_camp_equip_slots_Step_0") == 0)
+    {
+        SupplySort::OnSlotStep(selfInst);
     }
 
     if (strncmp(codeObj->i_pName, "gml_Room_", 9) == 0)

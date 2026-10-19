@@ -3,6 +3,7 @@
   <ItemGroup>
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="Features\PinFilter\PinFilter.cpp" />
+    <ClCompile Include="Features\SupplySort\SupplySort.cpp" />
     <ClCompile Include="SDK\Plugins\API Definitions\APIDefs.cpp">
       <Filter>SDK</Filter>
     </ClCompile>
@@ -21,6 +22,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Features\PinFilter\PinFilter.h" />
+    <ClInclude Include="Features\SupplySort\SupplySort.h" />
     <ClInclude Include="PluginSetup.h" />
     <ClInclude Include="SDK\Plugins\API Definitions\APIDefs.hpp">
       <Filter>SDK</Filter>

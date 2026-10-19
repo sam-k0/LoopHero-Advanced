@@ -161,6 +161,7 @@
   <ItemGroup>
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="Features\PinFilter\PinFilter.cpp" />
+    <ClCompile Include="Features\SupplySort\SupplySort.cpp" />
     <ClCompile Include="SDK\Plugins\API Definitions\APIDefs.cpp" />
     <ClCompile Include="SDK\Plugins\Plugins.cpp" />
     <ClCompile Include="SDK\Structures\Documented\CDynamicArray\CDynamicArray.cpp" />
@@ -170,6 +171,7 @@
   <ItemGroup>
     <ClInclude Include="Dependencies.h" />
     <ClInclude Include="Features\PinFilter\PinFilter.h" />
+    <ClInclude Include="Features\SupplySort\SupplySort.h" />
     <ClInclude Include="LH\Assets.h" />
     <ClInclude Include="LH\CallbackCore.h" />
     <ClInclude Include="LH\Config.h" />
